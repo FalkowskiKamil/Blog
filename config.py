@@ -5,7 +5,7 @@ class Config:
    SECRET_KEY = os.environ.get("SECRET_KEY") or "remember-to-add-secret-key"    
    SQLALCHEMY_DATABASE_URI = (                           
            os.environ.get('DATABASE_URL') or
-           'sqlite:///' + os.path.join(BASE_DIR, 'biblioteka.db')
+           'sqlite:///' + os.path.join(BASE_DIR, 'blog.db')
    )
    SQLALCHEMY_WARN_20=1
    SQLALCHEMY_TRACK_MODIFICATIONS = False

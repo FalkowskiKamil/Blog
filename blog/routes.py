@@ -2,7 +2,7 @@ from flask import render_template, request, flash, redirect, url_for, session
 from blog import app
 from blog.models import Entry, db
 from blog.forms import EntryForm, LoginForm
-from blog.data_manager import DataManager
+from blog.data_manager import data_manager
 import functools
 
 def login_required(view_func):
@@ -44,14 +44,14 @@ def index():
 def edit_entry(entry_id):
     errors = None
     header=f"Edycja wpisu nr {entry_id}"
-    entry = Entry.query.filter_by(id=entry_id).first_or_404()
+    entry = data_manager.get_post(entry_id)
     form = EntryForm(obj=entry)
     if request.method == 'POST':
         if form.validate_on_submit():
             form.populate_obj(entry)
             db.session.commit()
             flash('Post został zedytowany!')
-            all_posts = Entry.query.filter_by(is_published=True).order_by(Entry.pub_date.desc())
+            all_posts = data_manager.get_all_posts()
             return render_template("homepage.html", all_posts=all_posts)
         else:
             flash('Próba modyfikacji wpisu nieudana!')
@@ -74,7 +74,7 @@ def new_post():
             db.session.add(entry)
             db.session.commit()
             flash('Dodano nowy post')
-            all_posts = Entry.query.filter_by(is_published=True).order_by(Entry.pub_date.desc())
+            all_posts = data_manager.get_all_posts()
             return render_template("homepage.html", all_posts=all_posts)
         else:
             flash('Próba dodania wpisu nieudana!')

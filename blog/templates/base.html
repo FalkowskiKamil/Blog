@@ -33,9 +33,14 @@
     <ul class="navbar-nav mr-auto">
      </ul>
      <form class="form-inline my-2 my-lg-0">
-       <a class="btn btn-secondary mr-sm-2" href="/edit-post/0">Dodaj Nowy Wpis</a>
+       <a class="btn btn-secondary mr-sm-2" href="/new_post/">Dodaj Nowy Wpis</a>
        <input class="form-control mr-sm-2" type="text" placeholder="Szukaj" aria-label="Szukaj">
-       <button class="btn btn-secondary my-2 my-sm-0" type="submit">Szukaj</button>
+       <button class="btn btn-secondary mr-sm-2" type="submit">Szukaj</button>
+      {% if session.logged_in %}
+        <a href="{{ url_for('logout') }}" class="btn btn-secondary my-2 my-lg-0">Wyloguj</a>
+      {% else %}
+        <a href="{{ url_for('login') }}" class="btn btn-secondary my-2 my-lg-0">Zaloguj</a>
+      {% endif %}
      </form>
    </div>
  </nav>

@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h3>
+   Szkice wpisów: 
+</h3>
+       <table class="table table-striped">
+            <thead class="thead-dark">
+               <tr>
+                  <th scope="col"><label for="title">Data</label></th>
+                  <th scope="col"><label for="title">Tytuł</label></th> 
+                  <th scope="col"><label for="title">Treść</label></th>
+                  <th scope="col"><label for="title"></label></th>   
+               </tr>
+            </thead>
+            <tbody class="thead-light">
+            {% for post in drafts %}
+                <tr scope="row">
+                  <td>{{ post.pub_date.strftime('%Y-%m-%d') }}</td>
+                  <td><a href="{{ url_for('edit_entry', entry_id=post.id) }}">{{ post.title }}</a></td>
+                  <td>{{ post.body|truncate(100, true)}}</td>
+                  <td><form action="/delete_entry/{{post.id}}" method="POST">
+                     <button type="submit"  class="btn btn-danger" type="red">Usuń</button>
+                  </form></td>
+               </tr>
+            {% endfor %}
+            </tbody>
+       </table>
+</form>
+{% endblock %}

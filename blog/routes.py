@@ -66,13 +66,7 @@ def new_post():
     header='Dodaj nowy wpis'
     if request.method == 'POST':
         if form.validate_on_submit():
-            entry = Entry(
-                title=form.title.data,
-                body=form.body.data,
-                is_published=form.is_published.data
-            )
-            db.session.add(entry)
-            db.session.commit()
+            data_manager.add_post(title=form.title.data, body=form.body.data, is_published=form.is_published.data)
             flash('Dodano nowy post')
             all_posts = data_manager.get_all_posts()
             return render_template("homepage.html", all_posts=all_posts)
@@ -80,3 +74,17 @@ def new_post():
             flash('Próba dodania wpisu nieudana!')
             errors = form.errors
     return render_template("entry_form.html", form=form, errors=errors, header=header)
+
+@app.route("/drafts/", methods=["GET", "POST"])
+@login_required
+def list_drafts():
+    drafts = data_manager.get_draft()
+    return render_template("drafts.html", drafts=drafts)
+
+@app.route("/delete_entry/<int:entry_id>", methods=["POST"])
+@login_required
+def delete_entry(entry_id):
+    data_manager.delete_post(entry_id)
+    flash('Post został usunięty!!')
+    all_posts = data_manager.get_all_posts()
+    return render_template("homepage.html", all_posts=all_posts)
